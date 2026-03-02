@@ -1,0 +1,15 @@
+[font]
+builtin_box_drawing = true
+size = 18
+
+[font.normal]
+family = "JetBrains Mono"
+style = "Bold"
+
+[general]
+import = [
+    "~/.config/alacritty/theme/tokyo_night.toml"
+]
+
+[window]
+opacity = 0.75 
