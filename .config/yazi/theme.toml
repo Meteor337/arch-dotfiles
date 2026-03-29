@@ -1,0 +1,13 @@
+[colors]
+comment = "#565f89"
+constant = "#f7768e"
+entity = "#7aa2f7"
+function = "#7aa2f7"
+keyword = "#bb9af7"
+number = "#ff9e64"
+operator = "#89b4fa"
+preproc = "#e0af68"
+string = "#9ece6a"
+tag = "#bb9af7"
+type = "#e0af68"
+variable = "#c0caf5"

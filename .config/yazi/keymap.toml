@@ -1,0 +1,29 @@
+[manager]
+quit = [
+    { on = "q", run = "quit" },
+    { on = "Q", run = "quit --no-cwd-file" },
+]
+
+reload = [
+    { on = "r", run = "reload" },
+]
+
+create = [
+    { on = "a", run = "create" },
+]
+
+rename = [
+    { on = "R", run = "rename --subst" },
+]
+
+shell = [
+    { on = "t", run = 'shell "$SHELL"', desc = "Open terminal" },
+]
+
+search_files = [
+    { on = "f", run = "search fd", desc = "Search files" },
+]
+
+search_content = [
+    { on = "g", run = "search rg", desc = "Search content" },
+]
