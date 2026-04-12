@@ -21,16 +21,9 @@ if status is-interactive
         echo -n -s (set_color green) "➜" (set_color normal) " "
     end
     
-    function y
-        set tmp (mktemp -t "yazi-cwd.XXXXXX")
-        command yazi $argv --cwd-file="$tmp"
-        if read -z cwd < "$tmp"; and [ "$cwd" != "$PWD" ]; and test -d "$cwd"
-            builtin cd -- "$cwd"
-        end
-        rm -f -- "$tmp"
-    end
-    
     # Алиасы
-    alias v='nvim'
+    alias n='nvim'
     alias t='tmux'
+    alias cat='bat'
+    alias ls='eza -la'
 end

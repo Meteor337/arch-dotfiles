@@ -104,6 +104,10 @@ tooltip {
   margin-left: 0;
 }
 
+#window {
+  margin-top: 10px;
+}
+
 /* -- Right Modules -- */
 /* Network */
 #network {

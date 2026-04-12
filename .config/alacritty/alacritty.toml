@@ -4,7 +4,7 @@ size = 18
 
 [font.normal]
 family = "JetBrains Mono"
-style = "Bold"
+style = 'Bold'
 
 [general]
 import = [
@@ -12,4 +12,5 @@ import = [
 ]
 
 [window]
-opacity = 0.75 
+opacity = 1.0
+padding = {x = 10, y = 10}

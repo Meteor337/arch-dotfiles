@@ -1,0 +1,100 @@
+/* Tokyo Night Colors */
+@define-color bg #1a1b26;
+@define-color bg-darker #16161e;
+@define-color bg-popup #24283b;
+@define-color fg #c0caf5;
+@define-color fg-dim #565f89;
+@define-color blue #7aa2f7;
+@define-color cyan #7dcfff;
+@define-color purple #9d7cd8;
+@define-color red #f7768e;
+@define-color green #9ece6a;
+@define-color yellow #e0af68;
+@define-color orange #ff9e64;
+
+/* Главное окно уведомлений */
+.control-center {
+  background-color: transparent;
+}
+
+/* Строка с уведомлением */
+.notification-row {
+  outline: none;
+  margin-bottom: 8px;
+}
+
+/* Само уведомление */
+.notification {
+  background-color: @bg-popup;
+  border-radius: 12px;
+  border: 1px solid rgba(60, 60, 70, 0.8);
+  margin: 8px 12px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Контент уведомления */
+.notification-content {
+  padding: 12px 14px;
+}
+
+/* Кнопка закрытия */
+.close-button {
+  background-color: @red;
+  border-radius: 100%;
+  color: @bg-darker;
+  margin: 6px;
+  padding: 4px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.close-button:hover {
+  background-color: @yellow;
+}
+
+/* Заголовок */
+.summary {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: @cyan;
+  margin-bottom: 6px;
+}
+
+/* Текст уведомления */
+.body {
+  color: @fg;
+  font-size: 0.95em;
+}
+
+/* Время */
+.time {
+  color: @fg-dim;
+  font-size: 0.8em;
+}
+
+/* Иконка приложения */
+.app-icon {
+  margin-right: 10px;
+}
+
+/* Критичные уведомления (красная полоска слева) */
+.notification-critical {
+  border-left: 4px solid @red;
+}
+
+/* Обычные уведомления (синяя полоска) */
+.notification-normal {
+  border-left: 4px solid @blue;
+}
+
+/* Низкий приоритет (серая полоска) */
+.notification-low {
+  border-left: 4px solid @fg-dim;
+}
+
+/* Картинка в уведомлении */
+.image {
+  border-radius: 8px;
+  margin-left: 10px;
+}
