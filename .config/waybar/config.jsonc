@@ -2,7 +2,7 @@
     "position": "top",
     "margin-left": 0,
     "margin-right": 0,
-    "height": 40,
+    "height": 32,
     "modules-left": [
         "hyprland/workspaces",
         "hyprland/window"
