@@ -1,161 +1,141 @@
 {
-    "layer": "top",
     "position": "top",
-    "mode": "dock",
-    "exclusive": true,
-    "passthrough": false,
-    "gtk-layer-shell": true,
-    "reload_style_on_change": true,
-    // Positions
+    "margin-left": 0,
+    "margin-right": 0,
+    "height": 40,
     "modules-left": [
-        "custom/idle_inhibitor",
-        "hyprland/workspaces"
+        "hyprland/workspaces",
+        "hyprland/window"
     ],
     "modules-center": [
-        "clock"
+        "group/time"
     ],
     "modules-right": [
+        "privacy",
         "hyprland/language",
-        "custom/cpu",
-        "temperature",
-        "memory",
+        "group/zvuk",
+        "group/hardware",
         "network",
-        "tray",
-        "pulseaudio",
-        "battery"
+        "battery",
+        "custom/powermenu"
     ],
-    // Left modules
-    "custom/idle_inhibitor": {
-        "format": "󰣇",
-        "exec": "~/.config/bin/idle-inhibitor.sh",
-        "on-click": "~/.config/bin/idle-inhibitor.sh --toggle",
-        "return-type": "json",
-        "tooltip": true,
-        "interval": 10,
-        "min-length": 2,
-        "max-length": 2
+    "hyprland/window": {
+        "format": "{initialTitle}",
+        "max-length": 35,
+        "rewrite": {
+            "": "Hyprland",
+            "alacritty": "Terminal"
+        },
+        "separate-outputs": false
+    },
+    "hyprland/language": {
+        "format": "<span color=\"#7798fa\"></span>  {}",
+        "format-en": "EN",
+        "format-ru": "RU"
     },
     "hyprland/workspaces": {
-        "active-only": false,
-        "all-outputs": true,
-        "format": "{icon}",
-        "show-special": false,
         "on-click": "activate",
-        "on-scroll-up": "hyprctl dispatch workspace e+1",
-        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        "sort-by-number": true,
         "persistent-workspaces": {
-            "*": 5
-        },
-        "format-icons": {
-            "active": "",
-            "default": ""
-        }
-    }, // <-- Здесь была пропущена закрывающая скобка
-    // Central modules
-    "clock": {
-        "interval": 1,
-        "format": " {:%H:%M}", // 24H
-        "format-alt": " {:%H:%M   %Y, %d %B, %A}",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>",
-        "calendar": {
-            "mode": "year",
-            "mode-mon-col": 3,
-            "weeks-pos": "right",
-            "on-scroll": 1,
-            "format": {
-                "months": "<span color='#ffead3'><b>{}</b></span>",
-                "days": "<span color='#ecc6d9'><b>{}</b></span>",
-                "weeks": "<span color='#99ffdd'><b>W{:%V}</b></span>",
-                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
-                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
-            }
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5"
         }
     },
-    // Right modules
-    "hyprland/language": {
-        "format": "{shortDescription}",
-        "spacing": 20
+    // Hardware info
+    "group/hardware": {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+            "memory",
+            "temperature"
+        ]
     },
-    "custom/cpu": {
-        "exec": "~/.config/bin/cpu-usage.sh",
-        "return-type": "json",
-        "on-click": "missioncenter",
-        "tooltip": true,
-        "interval": 5,
-        "min-length": 6,
-        "max-length": 6,
-        "spacing": 20
+    "cpu": {
+        "format": "<span color=\"#7798fa\"></span>  {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "<span color=\"#7798fa\"></span>  {percentage}%"
     },
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
-        "format": "{temperatureC}°C {icon}",
+        "format": "<span color=\"#7798fa\">{icon}</span> {temperatureC}°C",
         "format-icons": [
             "",
             "",
             ""
-        ],
-        "spacing": 20
+        ]
     },
-    "memory": {
-        "states": {
-            "c": 90
-        },
-        "format": "󰘚 {percentage}%",
-        "format-c": "󰀪 {percentage}%",
-        "tooltip": true,
-        "tooltip-format": "Memory Used: {used:0.1f} GB / {total:0.1f} GB",
-        "interval": 5,
-        "on-click": "alacritty sh -c btop",
-        "min-length": 6,
-        "max-length": 6,
-        "spacing": 20
+    // Audio info
+    "group/zvuk": {
+        "orientation": "horizontal",
+        "modules": [
+            "pulseaudio#output",
+            "pulseaudio#input"
+        ]
     },
-    "network": {
-        "interface": "*",
-        "interval": 5,
-        "format": " {bandwidthTotalBytes}",
-        "format-alt": " {bandwidthUpBytes}  {bandwidthDownBytes}",
-        "format-disconnected": "",
-        "tooltip-format": "  {ifname} \n {bandwidthUpBytes}  {bandwidthDownBytes}",
-        "tooltip-format-wifi": "󰖩 {essid} ({signalStrength}%) \n {bandwidthUpBytes}  {bandwidthDownBytes}",
-        "tooltip-format-disconnected": "Disconnected",
-        "on-click-right": "portmaster",
-        "max-length": 24,
-        "spacing": 20
-    },
-    "tray": {
-        "icon-size": 13,
-        "rotate": 0,
-        "spacing": 20
-    },
-    "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "󰝟 {volume}%",
+    "pulseaudio#output": {
+        "format": "<span color=\"#7798fa\">{icon}</span>  {volume}%",
+        "format-muted": " ",
         "format-icons": {
-            "headphone": "󰋋",
+            "headphone": "",
             "default": [
-                "󰕿",
-                "󰖀",
-                "󰕾"
+                "",
+                "",
+                ""
             ]
         },
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+    "pulseaudio#input": {
+        "format": "{format_source}",
+        "format-source": "<span color=\"#7798fa\"></span> {volume}%",
+        "format-source-muted": " ",
+        "tooltip-format": "Fifine K680",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"
+    },
+    // Time
+    "group/time": {
+        "modules": [
+            "clock",
+            "clock#simple"
+        ],
+        "orientation": "horizontal"
+    },
+    "clock#simple": {
+        "format": "{:%H:%M}",
+        "tooltip": false,
+        "interval": 1
+    },
+    "clock": {
+        "format": "{:%a %d, %b %Y}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%d-%m-%Y}"
+    },
+    "privacy": {
+        "icon-size": 15,
+        "icon-spacing": 8
+    },
+    "network": {
+        "format-wifi": "<span color=\"#7798fa\"> </span> {signalStrength}%",
+        "format-ethernet": "<span color=\"#7798fa\"></span>",
+        "format-disconnected": "<span color=\"#7798fa\">⚠</span>",
         "tooltip": true,
-        "tooltip-format": "{desc} - {volume}%",
-        "on-click": "~/.config/bin/volume-control.sh m",
-        "on-click-right": "pavucontrol",
-        "on-scroll-up": "~/.config/bin/volume-control.sh i",
-        "on-scroll-down": "~/.config/bin/volume-control.sh d",
-        "min-length": 6,
-        "max-length": 6,
-        "spacing": 20
+        "tooltip-format": "{essid} ({signalStrength}%)",
+        "on-click": "alacritty -e nmtui"
     },
     "battery": {
         "states": {
             "warning": 30,
             "critical": 20
         },
-        "format": "{icon} {capacity}%",
+        "format": "<span color=\"#7798fa\">{icon}</span> {capacity}%",
         "format-icons": [
             "󰂎",
             "󰁺",
@@ -169,13 +149,17 @@
             "󰂂",
             "󰁹"
         ],
-        "format-charging": "󱘖 {capacity}%",
+        "format-charging": "<span color=\"#7798fa\">󱘖</span> {capacity}%",
         "tooltip": true,
         "tooltip-format": "Time to Empty: {time}",
         "tooltip-format-charging": "Time to Full: {time}",
         "interval": 5,
         "min-length": 6,
-        "max-length": 6,
-        "spacing": 20
+        "max-length": 6
+    },
+    "custom/powermenu": {
+        "format": "<span color=\"#f7768e\">⏻</span>",
+        "tooltip": false,
+        "on-click": "~/.config/rofi/scripts/powermenu.sh"
     }
 }

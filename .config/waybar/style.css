@@ -1,168 +1,211 @@
 /* -- Global Styling -- */
-@define-color background #1b1e2e;
-@define-color foreground #f5f5f5;
-@define-color selected #35333b;
-@define-color active #3a3f5a;
+@define-color background #16161D;
+@define-color foreground #FFFFFF;
+@define-color foreground-dark #7798fa;
+@define-color power #DCA561;
+@define-color red #C34043;
+@define-color orange #FF9E3B;
+@define-color overlay #2A2A37;
+
 * {
-  border: none;
-  font-family: "JetBrainsMono Nerd Font";
-  font-weight: 700;
-  font-size: 14px;
-  color: @foreground;
+  font-family:
+    "JetBrains Mono NerdFont", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1em;
 }
 
 window#waybar {
-  background: transparent;
+  background-color: transparent;
+  border-radius: 0;
+  transition-property: background-color;
+  transition-duration: 0.5s;
 }
 
 window#waybar > box {
-  margin: 7px 6px 0 6px;
-  padding: 1px 0;
+  padding: 5px 0;
+}
+
+button {
+  box-shadow: inset 0 -3px transparent;
+  border: none;
+  border-radius: 10px;
+}
+
+button:hover {
+  background: inherit;
+  border: none;
+}
+
+/* Workspaces styles */
+
+#workspaces {
+  font-weight: 800;
+  margin-right: 5px;
   background-color: @background;
-  border-radius: 15px;
-  border: 2px solid @selected;
-  opacity: 0.97;
-}
-
-/* -- Tooltip Styling -- */
-tooltip {
-  background: @background;
-  border: solid;
-  border-width: 1px;
-  border-radius: 10px;
-  border-color: @selected;
-}
-
-/* -- General Module Styling -- */
-#custom-idle_inhibitor,
-#workspaces,
-#window,
-#custom-cpuinfo,
-#memory,
-#custom-cpu,
-#clock,
-#custom-wifi,
-#network,
-#tray,
-#privacy,
-#language,
-#pulseaudio,
-#custom-backlight,
-#power-profiles-daemon,
-#battery,
-#custom-power {
-  opacity: 1;
-  padding: 0px 2px;
-  margin: 0px 3px;
-}
-
-/* -- Left Modules -- */
-/* Idle Inhibitor */
-#custom-idle_inhibitor {
-  padding-left: 2px;
-  padding-right: 5px;
-  margin-left: 6px;
-  margin-right: 0;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-#custom-idle_inhibitor:hover {
-  background: @selected;
-  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
-  border-radius: 13px;
-}
-
-/* Workspaces */
-/* Workspace Button */
-#workspaces button {
   color: @foreground;
-  border-radius: 9px;
-  margin: 2px 0px;
-  padding: 0 2px;
-  margin-left: 0;
-  animation: ws_normal 20s ease-in-out 1;
-}
-
-/* Active Workspace Button */
-#workspaces button.active {
-  background: @active;
-  margin: 2px 2px;
-  padding: 0 5px;
-  animation: ws_active 20s ease-in-out 1;
-  transition: all 0.4s cubic-bezier(0.55, -0.68, 0.48, 1.682);
-}
-
-/* Hover Effect for Workspace Buttons */
-#workspaces button:hover {
-  background: @selected;
-  animation: ws_hover 20s ease-in-out 1;
-  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
-}
-
-#window {
-  margin-left: 0;
-}
-
-#window {
-  margin-top: 10px;
-}
-
-/* -- Right Modules -- */
-/* Network */
-#network {
-  font-size: 13px;
-}
-
-/* Tray */
-#tray {
-  padding: 0 6px;
-}
-
-#tray menu {
   border-radius: 10px;
-  background: @background;
 }
 
-#tray menu menuitem {
-  border-radius: 8px;
+#workspaces button {
+  border-radius: 10px;
+  padding: 0 8px;
+  color: inherit;
+  background-color: transparent;
+  transition: 0.5s ease-out;
 }
 
-#tray menu menuitem:hover {
-  background-color: @selected;
+#workspaces button:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#workspaces button.active {
+  background-color: @foreground-dark;
+  color: @background;
+}
+
+#workspaces button.active:nth-child(1) {
+  border-radius: 10px 0 0 10px;
+}
+#workspaces button.active:nth-last-child(1) {
+  border-radius: 0 10px 10px 0;
+}
+
+#workspaces button.urgent {
+  border-bottom: 2px solid @orange;
+  border-radius: 0;
+}
+
+#workspaces button.urgent:nth-child(1) {
+  border-bottom: 2px solid @orange;
+  border-radius: 10px 0 0 10px;
+}
+
+#workspaces button.urgent:nth-last-child(1) {
+  border-bottom: 2px solid @orange;
+  border-radius: 0 10px 10px 0;
+}
+
+/* Hardware group styles */
+
+#hardware {
+  margin-right: 5px;
+}
+
+#cpu {
+  padding-right: 10px;
+}
+
+#memory {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#temperature {
+  padding-left: 10px;
+}
+
+#network {
+  margin-right: 5px;
+}
+
+#battery {
+  margin-right: 5px;
+}
+
+/* Audio module styles */
+
+#zvuk {
+  background-color: @background;
+  color: @foreground;
+  border-radius: 10px;
+  margin-right: 5px;
+}
+
+#pulseaudio:hover {
+  background-color: @overlay;
+}
+
+#pulseaudio {
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+#pulseaudio.output.muted {
+  color: @red;
+}
+#pulseaudio.input.source-muted {
+  color: @red;
 }
 
 /* Privacy */
+
 #privacy {
-  background-color: #005000;
-  border-radius: 6px;
-  padding: 0 6px;
+  background-color: @background;
+  color: @power;
+  border: 1.5px solid @power;
+  padding: 6px 10px;
+  border-radius: 10px;
+  margin-right: 10px;
 }
 
-/* Power Profiles */
-#power-profiles-daemon {
-  padding-right: 6px;
+/* Language */
+
+#language {
+  margin-right: 5px;
 }
 
-/* Battery */
-#battery.warning {
-  color: #f9da95;
+/* Time group styles */
+
+#time {
+  border-radius: 10px;
+  font-weight: 700;
+  background-color: @background;
+  color: @foreground;
 }
 
-#battery.critical {
-  color: #f7668f;
+#clock.simple {
+  padding: 6px 10px;
+  background-color: @foreground-dark;
+  color: @background;
+  border-radius: 0 10px 10px 0;
+  font-weight: 700;
 }
 
-/* Power Button */
-#custom-power {
-  padding-left: 4px;
-  padding-right: 6px;
-  margin-right: 6px;
-  border-radius: 4px;
+#clock {
+  padding: 6px 10px;
+  border-radius: 10px 0 0 10px;
 }
 
-#custom-power:hover {
-  background: @selected;
-  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
-  border-radius: 12px;
+#custom-powermenu {
+  background-color: @background;
+  color: #c34043; /* ← красный цвет, такой же как у @red */
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+/* Default module styles */
+
+#battery,
+#power,
+#network,
+#hardware,
+#window,
+#language {
+  font-weight: 700;
+  background-color: @background;
+  color: @foreground;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.modules-right {
+  padding: 0 10px;
+}
+
+.modules-left {
+  padding: 0 10px;
+}
+
+label:focus {
+  background-color: #000;
 }
