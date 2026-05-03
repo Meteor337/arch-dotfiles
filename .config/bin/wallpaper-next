@@ -20,7 +20,7 @@ else
 fi
 
 # Вычисляем следующий индекс (зацикливаем)
-next_index=$(( (current_index + 1) % ${#wallpapers[@]} ))
+next_index=$(((current_index + 1) % ${#wallpapers[@]}))
 
 # Берём следующие обои
 next_wallpaper="${wallpapers[$next_index]}"
@@ -30,7 +30,7 @@ pkill swaybg 2>/dev/null
 swaybg -o "*" -i "$next_wallpaper" -m fill &
 
 # Сохраняем новый индекс
-echo "$next_index" > "$STATE_FILE"
+echo "$next_index" >"$STATE_FILE"
 
 # Уведомление
-notify-send "Обои изменены" "$(basename "$next_wallpaper")"
+notify-send -t 3000 "Обои изменены" "$(basename "$next_wallpaper")"

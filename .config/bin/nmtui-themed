@@ -1,0 +1,7 @@
+#!/bin/bash
+NEWT_COLORS='root=black,black;window=white,#16161D;border=#7798fa,#16161D;listbox=white,#1A1B26;label=#7798fa,#16161D;checkbox=#F7768E,#1A1B26;title=#7798fa,#16161D;button=#16161D,#7798fa;actsellistbox=#16161D,#7798fa;actlistbox=#16161D,#33467C;compactbutton=#16161D,#33467C;actcheckbox=#16161D,#7798fa;entry=white,#1A1B26;textbox=#C0CAF5,#1A1B26'
+
+alacritty \
+    --class nmtui-waybar \
+    --title "Network Manager" \
+    -e sh -c "NEWT_COLORS=\"$NEWT_COLORS\" nmtui"
