@@ -1,32 +1,36 @@
 return {
 	{
 		"akinsho/bufferline.nvim",
-		version = "*",
-		dependencies = "nvim-tree/nvim-web-devicons",
 		event = "VeryLazy",
 		keys = {
-			{ "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
-			{ "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
-			{ "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
-			{ "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
 			{ "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
 			{ "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
-			{ "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
-			{ "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
-			{ "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
-			{ "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
-			{ "<leader>bj", "<cmd>BufferLinePick<cr>", desc = "Pick Buffer" },
 		},
 		opts = {
 			options = {
-				-- Используем стандартную команду вместо Snacks
-				close_command = "bdelete! %d",
-				right_mouse_command = "bdelete! %d",
+				-- Проверка на наличие Snacks для безопасного удаления буферов
+				close_command = function(n)
+					if _G.Snacks then
+						Snacks.bufdelete(n)
+					else
+						vim.api.nvim_buf_delete(n, { force = false })
+					end
+				end,
+				right_mouse_command = function(n)
+					if _G.Snacks then
+						Snacks.bufdelete(n)
+					else
+						vim.api.nvim_buf_delete(n, { force = false })
+					end
+				end,
 				diagnostics = "nvim_lsp",
-				always_show_bufferline = true,
-				-- Упрощенный индикатор диагностики без LazyVim
-				diagnostics_indicator = function(count, level, diagnostics_dict, context)
-					return "(" .. count .. ")"
+				always_show_bufferline = false,
+				diagnostics_indicator = function(_, _, diag)
+					-- Безопасное получение иконок
+					local icons = _G.LazyVim and LazyVim.config.icons.diagnostics or {}
+					local ret = (diag.error and (icons.Error or " ") .. diag.error .. " " or "")
+						.. (diag.warning and (icons.Warn or " ") .. diag.warning or "")
+					return vim.trim(ret)
 				end,
 				offsets = {
 					{
@@ -35,17 +39,29 @@ return {
 						highlight = "Directory",
 						text_align = "left",
 					},
+					{
+						filetype = "snacks_layout_box",
+					},
 				},
-				-- Упрощенная функция для иконок
-				get_element_icon = function(element)
-					local icon, hl =
-						require("nvim-web-devicons").get_icon_by_filetype(element.filetype, { default = false })
-					return icon, hl
+				get_element_icon = function(opts)
+					return _G.LazyVim and LazyVim.config.icons.ft[opts.filetype]
 				end,
 			},
 		},
 		config = function(_, opts)
 			require("bufferline").setup(opts)
+			-- Исправлено: корректное обновление при работе с сессиями
+			vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
+				callback = function()
+					vim.schedule(function()
+						pcall(function()
+							if vim.api.nvim_get_vvar("vim_did_entering") ~= 1 then
+								vim.cmd("redrawtabline")
+							end
+						end)
+					end)
+				end,
+			})
 		end,
 	},
 }

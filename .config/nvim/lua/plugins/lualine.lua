@@ -1,127 +1,150 @@
 return {
 	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
-	config = function()
-		-- 1. Импорт цветов Tokyo Night (исправлено)
-		local ok, tokyonight = pcall(require, "tokyonight.colors")
-		local colors
-		if ok then
-			colors = tokyonight.setup()
+	event = "VeryLazy",
+	init = function()
+		vim.g.lualine_laststatus = vim.o.laststatus
+		if vim.fn.argc(-1) > 0 then
+			vim.o.statusline = " "
 		else
-			-- Fallback цвета если тема Tokyo Night не установлена
-			colors = {
-				bg = "#1a1b26",
-				bg_dark = "#16161e",
-				bg_highlight = "#2c3e50",
-				fg = "#c0caf5",
-				comment = "#565f89",
-				blue = "#7aa2f7",
-				green = "#9ece6a",
-				orange = "#ff9e64",
-				red = "#f7768e",
-				yellow = "#e0af68",
-				warning = "#e0af68",
-				info = "#7dcfff",
-			}
+			vim.o.laststatus = 0
 		end
+	end,
+	opts = function()
+		-- Исправляем внутренние требования lualine
+		local lualine_require = require("lualine_require")
+		lualine_require.require = require
 
-		-- 2. Маппинг цветов
-		local p = {
-			bg = colors.bg,
-			bg_dark = colors.bg_dark,
-			bg_float = colors.bg_highlight or colors.bg,
-			fg = colors.fg,
-			fg_dim = colors.comment,
-			func = colors.blue,
-			string = colors.green,
-			class = colors.orange,
-			error = colors.red,
-			number = colors.yellow,
-			diag_err = colors.red,
-			diag_warn = colors.warning or colors.yellow,
-			diag_info = colors.info or colors.blue,
-		}
+		-- Безопасное получение иконок
+		local icons = (LazyVim and LazyVim.config and LazyVim.config.icons)
+			or {
+				diagnostics = { Error = " ", Warn = " ", Info = " ", Hint = " " },
+				git = { added = " ", modified = " ", removed = " " },
+			}
 
-		-- 3. Кастомная тема (без скруглений)
-		local custom_theme = {
-			normal = {
-				a = { bg = p.func, fg = p.bg, gui = "bold" },
-				b = { bg = p.bg_float, fg = p.fg },
-				c = { bg = p.bg_dark, fg = p.fg_dim },
-			},
-			insert = {
-				a = { bg = p.string, fg = p.bg_dark, gui = "bold" },
-				b = { bg = p.bg_float, fg = p.fg },
-				c = { bg = p.bg_dark, fg = p.fg_dim },
-			},
-			visual = {
-				a = { bg = p.class, fg = p.bg_dark, gui = "bold" },
-				b = { bg = p.bg_float, fg = p.fg },
-				c = { bg = p.bg_dark, fg = p.fg_dim },
-			},
-			replace = {
-				a = { bg = p.error, fg = p.bg, gui = "bold" },
-				b = { bg = p.bg_float, fg = p.fg },
-				c = { bg = p.bg_dark, fg = p.fg_dim },
-			},
-			command = {
-				a = { bg = p.number, fg = p.bg, gui = "bold" },
-				b = { bg = p.bg_float, fg = p.fg },
-				c = { bg = p.bg_dark, fg = p.fg_dim },
-			},
-			inactive = {
-				a = { bg = p.bg_dark, fg = p.fg_dim, gui = "bold" },
-				b = { bg = p.bg_dark, fg = p.fg_dim },
-				c = { bg = p.bg_dark, fg = p.fg_dim },
-			},
-		}
+		vim.o.laststatus = vim.g.lualine_laststatus
 
-		-- 4. Настройка Lualine (прямые углы)
-		require("lualine").setup({
+		local opts = {
 			options = {
-				theme = custom_theme,
-				component_separators = { left = "", right = "" },
-				section_separators = { left = "", right = "" }, -- Убраны скругленные элементы
-				globalstatus = true,
-				disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
+				theme = "auto",
+				globalstatus = vim.o.laststatus == 3,
+				disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
 			},
 			sections = {
-				lualine_a = {
-					{ "mode", right_padding = 2 },
-				},
-				lualine_b = {
-					"branch",
-					{ "diff", colored = true },
-				},
+				lualine_a = { "mode" },
+				lualine_b = { "branch" },
 				lualine_c = {
-					{ "filename", path = 1 },
-				},
-				lualine_x = {
+					-- Проверка наличия функций LazyVim
+					(LazyVim and LazyVim.lualine and LazyVim.lualine.root_dir()) or { "filetype", icon_only = false },
 					{
 						"diagnostics",
-						sources = { "nvim_diagnostic" },
-						symbols = { error = " ", warn = " ", info = " " },
-						diagnostics_color = {
-							error = { fg = p.diag_err },
-							warn = { fg = p.diag_warn },
-							info = { fg = p.diag_info },
+						symbols = {
+							error = icons.diagnostics.Error,
+							warn = icons.diagnostics.Warn,
+							info = icons.diagnostics.Info,
+							hint = icons.diagnostics.Hint,
 						},
 					},
-					"filetype",
+					{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+					(LazyVim and LazyVim.lualine and LazyVim.lualine.pretty_path()) or { "filename" },
 				},
-				lualine_y = { "progress" },
+				lualine_x = {
+					-- Проверка Snacks
+					(Snacks and Snacks.profiler and Snacks.profiler.status()) or nil,
+					{
+						function()
+							return require("noice").api.status.command.get()
+						end,
+						cond = function()
+							return package.loaded["noice"] and require("noice").api.status.command.has()
+						end,
+						color = function()
+							return Snacks and { fg = Snacks.util.color("Statement") } or { fg = "#ff00ff" }
+						end,
+					},
+					{
+						function()
+							return require("noice").api.status.mode.get()
+						end,
+						cond = function()
+							return package.loaded["noice"] and require("noice").api.status.mode.has()
+						end,
+						color = function()
+							return Snacks and { fg = Snacks.util.color("Constant") } or { fg = "#00ffff" }
+						end,
+					},
+					{
+						function()
+							return "  " .. require("dap").status()
+						end,
+						cond = function()
+							return package.loaded["dap"] and require("dap").status() ~= ""
+						end,
+						color = function()
+							return Snacks and { fg = Snacks.util.color("Debug") } or { fg = "#ff0000" }
+						end,
+					},
+					{
+						require("lazy.status").updates,
+						cond = require("lazy.status").has_updates,
+						color = function()
+							return Snacks and { fg = Snacks.util.color("Special") } or { fg = "#ffff00" }
+						end,
+					},
+					{
+						"diff",
+						symbols = {
+							added = icons.git.added,
+							modified = icons.git.modified,
+							removed = icons.git.removed,
+						},
+						source = function()
+							local gitsigns = vim.b.gitsigns_status_dict
+							if gitsigns then
+								return {
+									added = gitsigns.added,
+									modified = gitsigns.changed,
+									removed = gitsigns.removed,
+								}
+							end
+						end,
+					},
+				},
+				lualine_y = {
+					{ "progress", separator = " ", padding = { left = 1, right = 0 } },
+					{ "location", padding = { left = 0, right = 1 } },
+				},
 				lualine_z = {
-					{ "location", left_padding = 2 },
+					function()
+						return " " .. os.date("%R")
+					end,
 				},
 			},
-			inactive_sections = {
-				lualine_a = {},
-				lualine_b = {},
-				lualine_c = { "filename" },
-				lualine_x = { "location" },
-				lualine_y = {},
-				lualine_z = {},
-			},
-		})
+			extensions = { "neo-tree", "lazy", "fzf" },
+		}
+
+		-- Исправленная интеграция с Trouble
+		if vim.g.trouble_lualine and LazyVim.has("trouble.nvim") then
+			local trouble = require("trouble")
+			local symbols = trouble.statusline({
+				mode = "symbols",
+				groups = {},
+				title = false,
+				filter = { range = true },
+				format = "{kind_icon}{symbol.name:Normal}",
+				hl_group = "lualine_c_normal",
+			})
+			if symbols then
+				table.insert(opts.sections.lualine_c, {
+					function()
+						return symbols.get()
+					end,
+					cond = function()
+						return vim.b.trouble_lualine ~= false and symbols.has()
+					end,
+				})
+			end
+		end
+
+		return opts
 	end,
 }

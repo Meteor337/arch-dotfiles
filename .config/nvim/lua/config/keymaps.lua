@@ -2,7 +2,7 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
+map("i", "jj", "<ESC>")
 
 -- Clear search highlight
 map("n", "<Esc>", ":nohlsearch<CR>", opts)
@@ -50,10 +50,6 @@ map("n", "<leader>yc", function()
 		print(" Contents of '" .. char .. "' sent to Clipboard!")
 	end
 end, opts)
-
--- Bufferline
-vim.keymap.set("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", {})
-vim.keymap.set("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", {})
 
 -- Save & exit file
 vim.keymap.set("n", "<leader>q", ":bd<CR>", { noremap = true, silent = true })
