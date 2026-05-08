@@ -4,36 +4,26 @@
     "margin-right": 0,
     "height": 32,
     "modules-left": [
-        "hyprland/workspaces",
-        "hyprland/window"
+        "niri/workspaces"
     ],
     "modules-center": [
         "group/time"
     ],
     "modules-right": [
         "privacy",
-        "hyprland/language",
+        "niri/language",
         "group/zvuk",
         "group/hardware",
         "network",
         "battery",
         "custom/powermenu"
     ],
-    "hyprland/window": {
-        "format": "{initialTitle}",
-        "max-length": 35,
-        "rewrite": {
-            "": "Hyprland",
-            "alacritty": "Terminal"
-        },
-        "separate-outputs": false
-    },
-    "hyprland/language": {
+    "niri/language": {
         "format": "<span color=\"#7798fa\"></span>  {}",
         "format-en": "EN",
         "format-ru": "RU"
     },
-    "hyprland/workspaces": {
+    "niri/workspaces": {
         "on-click": "activate",
         "sort-by-number": true,
         "persistent-workspaces": {
@@ -41,7 +31,11 @@
             "2": "2",
             "3": "3",
             "4": "4",
-            "5": "5"
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9"
         }
     },
     // Hardware info
@@ -55,10 +49,12 @@
     },
     "cpu": {
         "format": "<span color=\"#7798fa\"></span>  {usage}%",
-        "tooltip": false
+        "tooltip": false,
+        "on-click": "alacritty -e btop"
     },
     "memory": {
-        "format": "<span color=\"#7798fa\"></span>  {percentage}%"
+        "format": "<span color=\"#7798fa\"></span>  {percentage}%",
+        "on-click": "alacritty -e btop"
     },
     "temperature": {
         "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
@@ -68,7 +64,8 @@
             "",
             "",
             ""
-        ]
+        ],
+        "on-click": "alacritty -e btop"
     },
     // Audio info
     "group/zvuk": {
@@ -93,9 +90,8 @@
     },
     "pulseaudio#input": {
         "format": "{format_source}",
-        "format-source": "<span color=\"#7798fa\"></span> {volume}%",
+        "format-source": "<span color=\"#7798fa\"></span>",
         "format-source-muted": " ",
-        "tooltip-format": "Fifine K680",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
         "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"
@@ -123,12 +119,12 @@
         "icon-spacing": 8
     },
     "network": {
-        "format-wifi": "<span color=\"#7798fa\"> </span> {signalStrength}%",
-        "format-ethernet": "<span color=\"#7798fa\"></span>",
-        "format-disconnected": "<span color=\"#7798fa\">⚠</span>",
+        "format-wifi": "<span color=\"#7798fa\"> </span> {essid}",
+        "format-ethernet": "<span color=\"#7798fa\"></span> {ifname}",
+        "format-disconnected": "<span color=\"#7798fa\">⚠</span> Отключено",
         "tooltip": true,
         "tooltip-format": "{essid} ({signalStrength}%)",
-        "on-click": "alacritty -e nmtui"
+        "on-click": "~/.config/bin/nmtui-themed"
     },
     "battery": {
         "states": {
@@ -136,6 +132,8 @@
             "critical": 20
         },
         "format": "<span color=\"#7798fa\">{icon}</span> {capacity}%",
+        "format-critical": "<span color=\"#f7768e\">{icon}</span> {capacity}%",
+        "format-warning": "<span color=\"#ff9e64\">{icon}</span> {capacity}%",
         "format-icons": [
             "󰂎",
             "󰁺",
@@ -149,7 +147,7 @@
             "󰂂",
             "󰁹"
         ],
-        "format-charging": "<span color=\"#7798fa\">󱘖</span> {capacity}%",
+        "format-charging": "<span color=\"#b9f27c\">󱘖</span> {capacity}%",
         "tooltip": true,
         "tooltip-format": "Time to Empty: {time}",
         "tooltip-format-charging": "Time to Full: {time}",

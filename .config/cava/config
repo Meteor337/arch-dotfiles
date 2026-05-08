@@ -246,11 +246,11 @@
 # a terminal that can change color definitions such as Gnome-terminal or rxvt.
 # default is to keep current terminal color
 ; background = default
-; foreground = default
+; foreground = '#7aa2f7'
 
 # SDL and sdl_glsl only support hex code colors, these are the default:
 ; background = '#111111'
-; foreground = '#33ffff'
+; foreground = '#7aa2f7'
 
 
 # Gradient mode, only hex defined colors are supported,
@@ -328,3 +328,19 @@
 ; 3 = 1 # midtone
 ; 4 = 1
 ; 5 = 1 # treble
+
+[color]
+# Включаем градиент
+gradient = 1
+
+# Палитра Tokyo Night (от основания к пикам)
+gradient_color_1 = '#7aa2f7' # Синий
+gradient_color_2 = '#7dcfff' # Голубой
+gradient_color_3 = '#b4f9f8' # Бирюзовый
+gradient_color_4 = '#bb9af7' # Фиолетовый
+gradient_color_5 = '#ff9e64' # Оранжевый
+gradient_color_6 = '#f7768e' # Розовый
+
+# Оставьте фон по умолчанию (прозрачным), 
+# либо уберите ";" ниже, если нужен фиксированный темный фон:
+; background = '#1a1b26'

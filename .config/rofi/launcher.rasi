@@ -1,6 +1,6 @@
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,run,window";
+	modi:                       "drun,run,window,calc,emoji";
     show-icons:                 true;
     icon-theme: "Papirus";
     display-drun:               "drun";
